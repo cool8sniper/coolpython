@@ -1,0 +1,10 @@
+.project
+build/
+dist/
+lion.egg-info/
+.pydevproject
+.settings/
+__pycache__/
+*.pyc
+.idea/
+.eggs/
