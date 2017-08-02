@@ -1,5 +1,7 @@
 import functools
 
+from typing import List
+
 
 @functools.total_ordering
 class MyObject:
