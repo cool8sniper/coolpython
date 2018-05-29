@@ -1,0 +1,49 @@
+FROM jenkins:latest
+MAINTAINER Jack <cool8sniper@gmail.com>
+
+# Switch to root
+USER root
+RUN DEBIAN_FRONTEND=noninteractive
+
+# Update repositories
+
+RUN apt-get -qq update
+
+# Upgrade system
+
+RUN apt-get -yqq upgrade
+
+# Install base packages
+
+RUN apt-get update && apt-get install -yqq --force-yes --no-install-recommends git-core vim sudo
+
+# Install Docker (within Docker)
+RUN wget -qO- https://get.docker.com/ | sh
+
+RUN echo "DOCKER_OPTS=\"-H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock\"" >> /etc/default/docker
+
+# Verify Docker
+RUN docker -v
+
+# Install dependencies
+RUN apt-get update && apt-get install -y python-pip docker-compose virtualenv
+
+ ## allowing jenkins user to run sudo commands
+RUN echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN gpasswd -a jenkins docker
+
+# Switch back
+USER jenkins
+
+
+# run docker
+# docker run -v /var/run/docker.sock:/var/run/docker.sock -p 1080:8080 -p 50000:50000 --name <container name> -idt jekninsci
+
+# get default password
+# docker exec <container name>  cat /var/jenkins_home/secrets/initialAdminPassword
+
+# tty
+# docker exec -it <container name> bash
+
+# next should do
+# put git key into jenkins
